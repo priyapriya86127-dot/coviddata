@@ -54,8 +54,13 @@ def login():
         return redirect(_safe_redirect_target(request.args.get("next")) or url_for("dashboard"))
 
     message = None
+<<<<<<< HEAD
     expected_email = LOGIN_EMAIL.strip().lower()
     expected_password = LOGIN_PASSWORD
+=======
+    expected_email = (os.environ.get("priyapriya86127@gmail.com") or "").strip().lower()
+    expected_password = os.environ.get("8531844041") or ""
+>>>>>>> 6089b32b2006179178a93c4519358e328cc9217c
 
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
