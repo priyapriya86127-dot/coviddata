@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trends — COVID-19 Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+  </head>
+  <body class="dashboard-body">
+    <script id="dashboard-data" type="application/json">{{ dashboard_data | tojson }}</script>
+
+    <div class="dashboard-layout" id="dashboard-layout">
+      <button
+        type="button"
+        class="sidebar-backdrop"
+        id="sidebar-backdrop"
+        tabindex="-1"
+        aria-hidden="true"
+        aria-label="Close navigation menu"
+      ></button>
+      <aside class="sidebar" id="dashboard-sidebar" aria-label="Dashboard navigation">
+        <div class="sidebar-brand">
+          <span class="icon" aria-hidden="true">🦠</span>
+          <span class="sidebar-brand-name">COVID-19 Dashboard</span>
+          <button type="button" class="sidebar-close" aria-label="Close navigation menu">&times;</button>
+        </div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="{{ url_for('dashboard') }}"><span class="nav-ico">◉</span> Overview</a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard_statistics') }}"><span class="nav-ico">▤</span> Statistics</a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard_map') }}"><span class="nav-ico">🌍</span> Map</a>
+          </li>
+          <li>
+            <a class="is-active" href="{{ url_for('dashboard_trends') }}"><span class="nav-ico">📈</span> Trends</a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard_vaccination') }}"><span class="nav-ico">💉</span> Vaccination</a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard_news') }}"><span class="nav-ico">📰</span> News &amp; Updates</a>
+          </li>
+          <li>
+            <a href="{{ url_for('dashboard_about') }}"><span class="nav-ico">ℹ</span> About COVID-19</a>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="main-area">
+        <header class="top-header">
+          <div class="top-header-lead">
+            <button
+              type="button"
+              class="sidebar-toggle"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+              aria-controls="dashboard-sidebar"
+            >
+              <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+            </button>
+            <div>
+              <h1>Trends</h1>
+              <p class="sub">Monthly trend lines from the “Monthly Trends” sheet.</p>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span class="last-updated">
+              <span aria-hidden="true">↻</span>
+              Last updated: {{ last_updated }}
+            </span>
+            <select class="pill-select" aria-label="Region" disabled>
+              <option>Global</option>
+            </select>
+            <button type="button" class="icon-btn" onclick="location.reload()" title="Refresh">🔔</button>
+            <span class="user-pill">
+              {{ user_email or "User" }}
+              <a href="{{ url_for('logout') }}">Logout</a>
+            </span>
+          </div>
+        </header>
+
+        <div class="content-scroll">
+          <section class="panel">
+            <h2>Global cases</h2>
+            <div class="chart-tabs" role="tablist">
+              <button type="button" disabled title="Not in workbook">Daily</button>
+              <button type="button" disabled title="Not in workbook">Weekly</button>
+              <button type="button" class="is-on">Monthly</button>
+            </div>
+            <div class="chart-wrap"><canvas id="chart-trends"></canvas></div>
+          </section>
+        </div>
+
+        <footer class="dash-footer">
+          <p>Data source: workbook loaded from server · &copy; {{ year }} COVID Project</p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+

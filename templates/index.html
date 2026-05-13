@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>COVID Project — Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-inner" aria-label="Primary">
+        <a class="logo" href="{{ url_for('index') }}#home">COVID Project</a>
+        <button
+          type="button"
+          class="nav-menu-btn"
+          id="nav-menu-btn"
+          aria-controls="site-nav-panel"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span class="nav-menu-icon" aria-hidden="true"></span>
+        </button>
+        <div class="site-nav-panel" id="site-nav-panel">
+          <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#contact">Contact</a></li>
+            {% if logged_in %}
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login', next=url_for('dashboard')) }}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero" aria-labelledby="home-heading">
+        <h1 id="home-heading">One place for COVID awareness and data</h1>
+        <p class="lead">
+          This application brings together information, trends, and tools so users
+          can understand the pandemic context, explore indicators, and stay informed
+          in a clear, structured way.
+        </p>
+        {% if logged_in %}
+        <p class="signed-in-badge" role="status">Signed in as {{ user_email }}</p>
+        <a class="btn" href="{{ url_for('dashboard') }}">Open dashboard</a>
+        {% endif %}
+        <a class="btn" href="#about">Learn more</a>
+        <a class="btn btn-outline" href="#contact">Get in touch</a>
+      </section>
+
+      <section id="about" aria-labelledby="about-heading">
+        <h2 id="about-heading">About</h2>
+        <p class="section-intro">
+          The project is built as a web experience focused on clarity and trust. It
+          is designed to grow: you can plug in live data sources, educational
+          content, or regional views as your requirements evolve.
+        </p>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Purpose</h3>
+            <p>
+              Surface reliable summaries and navigation so visitors quickly find
+              what matters—overview, deeper detail, and next steps.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Audience</h3>
+            <p>
+              General public, students, and teams who need a lightweight portal
+              without installing native apps.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Scope</h3>
+            <p>
+              Landing and information architecture today; ready to extend with
+              dashboards, APIs, or authenticated areas later.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="technology" aria-labelledby="technology-heading">
+        <h2 id="technology-heading">Technology used</h2>
+        <p class="section-intro">
+          The stack is intentionally small so you can run and deploy it easily on
+          any machine or host that supports Python.
+        </p>
+        <ul class="tech-list">
+          <li>Python 3</li>
+          <li>Flask</li>
+          <li>Pandas</li>
+          <li>Jinja2</li>
+          <li>Chart.js</li>
+          <li>Plotly</li>
+          <li>HTML5 / CSS3</li>
+        </ul>
+      </section>
+
+      <section id="contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading">Contact</h2>
+        <p class="section-intro">
+          Replace the placeholders below with your real details, or wire this
+          section to a form handler when you are ready.
+        </p>
+        <div class="contact-block">
+          <p><strong>Email</strong><br /><a href="mailto:priyapriya86127@gmail.com">priyapriya86127@gmail.com</a></p>
+          <p><strong>Project</strong><br />COVID Project — Flask landing</p>
+          <p><strong>Location</strong><br />Update this line with your city or organization.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; {{ year }} COVID Project. All rights reserved.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login — COVID Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-inner" aria-label="Primary">
+        <a class="logo" href="{{ url_for('index') }}#home">COVID Project</a>
+        <button
+          type="button"
+          class="nav-menu-btn"
+          id="nav-menu-btn"
+          aria-controls="site-nav-panel"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span class="nav-menu-icon" aria-hidden="true"></span>
+        </button>
+        <div class="site-nav-panel" id="site-nav-panel">
+          <ul class="nav-links">
+            <li><a href="{{ url_for('index') }}#home">Home</a></li>
+            <li><a href="{{ url_for('index') }}#about">About</a></li>
+            <li><a href="{{ url_for('index') }}#technology">Technology</a></li>
+            <li><a href="{{ url_for('index') }}#contact">Contact</a></li>
+            {% if logged_in %}
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+            <li><a class="is-active" href="{{ url_for('login') }}" aria-current="page">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="auth-main">
+      <div class="auth-card">
+        <h1 class="auth-title">Sign in</h1>
+        <p class="auth-lead">Enter the email and password for your account, then sign in.</p>
+
+        {% if message %}
+        <p class="form-banner is-error" role="alert">{{ message }}</p>
+        {% endif %}
+
+        <form class="auth-form" method="post" action="{{ url_for('login') }}" autocomplete="on">
+          {% if next_url %}
+          <input type="hidden" name="next" value="{{ next_url }}" />
+          {% endif %}
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              value="{{ prefilled_email }}"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password" />
+          </div>
+          <button class="btn auth-submit" type="submit">Sign in</button>
+        </form>
+
+        <p class="auth-footer"><a href="{{ url_for('index') }}">← Back to home</a></p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; {{ year }} COVID Project. All rights reserved.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+  </body>
+</html>
