@@ -13,6 +13,9 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
 
+LOGIN_EMAIL = "priyapriya86127@gmail.com"
+LOGIN_PASSWORD = "8531844041"
+
 
 def login_required(view):
     @wraps(view)
@@ -51,33 +54,30 @@ def login():
         return redirect(_safe_redirect_target(request.args.get("next")) or url_for("dashboard"))
 
     message = None
-    expected_email = (os.environ.get("LOGIN_EMAIL") or "").strip().lower()
-    expected_password = os.environ.get("LOGIN_PASSWORD") or ""
+    expected_email = LOGIN_EMAIL.strip().lower()
+    expected_password = LOGIN_PASSWORD
 
     if request.method == "POST":
-        if not expected_email or not expected_password:
-            message = "Login is not configured. Set LOGIN_EMAIL and LOGIN_PASSWORD in .env."
-        else:
-            email = (request.form.get("email") or "").strip().lower()
-            password = request.form.get("password") or ""
-            if secrets.compare_digest(
-                email.encode("utf-8"), expected_email.encode("utf-8")
-            ) and secrets.compare_digest(
-                password.encode("utf-8"), expected_password.encode("utf-8")
-            ):
-                session["logged_in"] = True
-                session["user_email"] = email
-                nxt = _safe_redirect_target(
-                    request.form.get("next") or request.args.get("next")
-                )
-                return redirect(nxt or url_for("dashboard"))
-            message = "Invalid email or password."
+        email = (request.form.get("email") or "").strip().lower()
+        password = request.form.get("password") or ""
+        if secrets.compare_digest(
+            email.encode("utf-8"), expected_email.encode("utf-8")
+        ) and secrets.compare_digest(
+            password.encode("utf-8"), expected_password.encode("utf-8")
+        ):
+            session["logged_in"] = True
+            session["user_email"] = email
+            nxt = _safe_redirect_target(
+                request.form.get("next") or request.args.get("next")
+            )
+            return redirect(nxt or url_for("dashboard"))
+        message = "Invalid email or password."
 
     return render_template(
         "login.html",
         year=datetime.now().year,
         message=message,
-        prefilled_email=os.environ.get("LOGIN_EMAIL", "").strip(),
+        prefilled_email=LOGIN_EMAIL.strip(),
         next_url=request.form.get("next") or request.args.get("next") or "",
     )
 
